@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   frontend:
@@ -12,6 +12,7 @@ services:
     image: lubasergei/diplom_slubash:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: always
     environment:
+      DEBUG: ${DEBUG}
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -25,18 +26,18 @@ services:
     ports:
       - "8000:8000"
   migrations:
-    image: lubasergei/diplom_slubash:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    environment:
-        POSTGRES_HOST: ${POSTGRES_HOST}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_DB}
-        SECRET_KEY: ${SECRET_KEY}
-    depends_on:
-      db:
-        condition: service_healthy
-    command: >
-      sh -c "python3 manage.py migrate"
+     image: lubasergei/diplom_slubash:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+     environment:
+       POSTGRES_HOST: ${POSTGRES_HOST}
+       POSTGRES_USER: ${POSTGRES_USER}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+       POSTGRES_DB: ${POSTGRES_DB}
+       SECRET_KEY: ${SECRET_KEY}
+     depends_on:
+       db:
+         condition: service_healthy
+     command: >
+       sh -c "python3 manage.py migrate"
   db:
     image: postgres:latest
     environment:
@@ -53,6 +54,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
 
 
 volumes:
